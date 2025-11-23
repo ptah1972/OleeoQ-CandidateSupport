@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Oleeo • Candidate Application Centre</title>
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#0E1B2A',
+            muted: '#415466',
+            coral: '#ff6a64',
+            coralDark: '#f45145',
+            cream: '#fff3ea'
+          },
+          fontFamily: {
+            inter: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif']
+          },
+          boxShadow: {
+            'soft': '0 10px 30px rgba(0,0,0,0.08)'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body class="min-h-screen bg-white text-ink font-inter">
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center gap-4 py-3">
+        <a class="shrink-0" href="#">
+          <img src="oleeo_logo.png" alt="Oleeo logo" class="h-10 w-auto"/>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-5 text-muted font-medium">
+          <a href="#" class="hover:text-ink transition">Home</a>
+          <a href="#" class="hover:text-ink transition">Events</a>
+          <a href="#" class="hover:text-ink transition">Student Opportunities</a>
+          <a href="#" class="hover:text-ink transition">Experienced Opportunities</a>
+          <a href="#" class="hover:text-ink transition">Talent Bank</a>
+          <a href="#" class="hover:text-ink transition">Help Centre</a>
+        </nav>
+
+        <div class="ml-auto relative">
+          <button id="userMenuBtn" class="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold bg-gray-50 hover:bg-gray-100">
+            Wilhelmina Tate <span class="text-xs">▾</span>
+          </button>
+          <div id="userDropdown" class="hidden absolute right-0 mt-2 w-56 rounded-xl border bg-white p-2 shadow-soft">
+            <a href="#" class="block rounded-lg px-3 py-2 hover:bg-gray-50">My Profile</a>
+            <a href="#" class="block rounded-lg px-3 py-2 hover:bg-gray-50">Applications</a>
+            <a href="#" class="block rounded-lg px-3 py-2 hover:bg-gray-50">Alerts</a>
+            <a href="#" class="block rounded-lg px-3 py-2 hover:bg-gray-50">Sign out</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-3xl mx-auto px-4 py-12 md:py-16">
+    <section class="space-y-5">
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Welcome</h1>
+      <p class="text-muted">Thank you for your interest in Oleeo. We look forward to receiving your application.</p>
+      <p class="text-muted">Use the links in the navigation bar to search for and apply to our current opportunities and events.</p>
+
+      <div>
+        <p class="mb-2 text-muted">Once you’ve registered and logged in, you’ll be able to:</p>
+        <ul class="list-disc pl-6 text-muted space-y-1">
+          <li>View the status of any completed applications.</li>
+          <li>Create alerts.</li>
+          <li>View all communications we have sent you.</li>
+          <li>Schedule interviews.</li>
+          <li>Update your personal information.</li>
+        </ul>
+      </div>
+
+      <p class="italic text-muted">Visit the Help Centre if you have questions or encounter technical difficulties navigating the site.</p>
+
+      <div class="flex flex-wrap gap-3 pt-3">
+        <button class="btn-primary">Search Opportunities</button>
+        <button class="btn-outline">View My Applications</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t-4 border-[#f1b39f] bg-cream">
+    <div class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between gap-3 flex-wrap">
+      <span class="text-sm text-muted">Copyright ©2024, Oleeo Ltd. All rights reserved.</span>
+      <a href="#" class="text-sm text-muted hover:text-ink">Cookie Policy</a>
+    </div>
+  </footer>
+
+<!-- DisableInputExtension definition -->
+<script type="text/javascript">
+  const DisableInputExtension = {
+    name: 'DisableInput',
+    type: 'effect',
+    match: ({ trace }) =>
+      trace.type === 'ext_disableInput' ||
+      trace.payload?.name === 'ext_disableInput',
+    effect: ({ trace }) => {
+      const { isDisabled } = trace.payload;
+
+      function disableInput() {
+        // Find all elements that have a shadowRoot
+        const hosts = [...document.querySelectorAll('*')].filter(
+          (el) => el.shadowRoot
+        );
+
+        let textarea = null;
+        let sendBtn = null;
+        let root = null;
+
+        // Search through each shadow root to find the textarea
+        for (const host of hosts) {
+          root = host.shadowRoot;
+          textarea = root.querySelector('textarea.vfrc-chat-input');
+          if (textarea) {
+            sendBtn = root.querySelector('#vfrc-send-message');
+            break;
+          }
+        }
+
+        if (!textarea) {
+          console.error('DisableInputExtension: Voiceflow textarea not found');
+          return;
+        }
+
+        if (!root) {
+          console.error('DisableInputExtension: Shadow root not found');
+          return;
+        }
+
+        // Add or update style tag for visual disabled state
+        let styleTag = root.querySelector('#vf-disable-input-style');
+        if (!styleTag) {
+          styleTag = document.createElement('style');
+          styleTag.id = 'vf-disable-input-style';
+          root.appendChild(styleTag);
+        }
+
+        // Store original value descriptor
+        const originalValueDescriptor = Object.getOwnPropertyDescriptor(
+          HTMLTextAreaElement.prototype,
+          'value'
+        );
+
+        function updateInputState() {
+          if (isDisabled) {
+            // Disable: apply visual styles and logical disable
+            styleTag.textContent = `
+              textarea.vfrc-chat-input {
+                pointer-events: none !important;
+                opacity: 0.4 !important;
+                cursor: default !important;
+                caret-color: transparent !important;
+              }
+              #vfrc-send-message {
+                pointer-events: none !important;
+                opacity: 0.35 !important;
+                cursor: default !important;
+              }
+            `;
+
+            // Logical disable
+            textarea.readOnly = true;
+            textarea.disabled = true;
+            if (sendBtn) {
+              sendBtn.disabled = true;
+            }
+
+            // Clear the value and block changes
+            Object.defineProperty(textarea, 'value', {
+              get: function () {
+                return '';
+              },
+              set: function () {},
+              configurable: true,
+            });
+            textarea.value = '';
+          } else {
+            // Enable: remove visual styles and logical enable
+            styleTag.textContent = '';
+
+            // Logical enable
+            textarea.readOnly = false;
+            textarea.disabled = false;
+            if (sendBtn) {
+              sendBtn.disabled = false;
+            }
+
+            // Restore original value getter/setter
+            Object.defineProperty(textarea, 'value', originalValueDescriptor);
+          }
+
+          // Trigger events to update component state
+          textarea.dispatchEvent(
+            new Event('input', { bubbles: true, cancelable: true })
+          );
+          textarea.dispatchEvent(
+            new Event('change', { bubbles: true, cancelable: true })
+          );
+        }
+
+        // Initial update
+        updateInputState();
+      }
+
+      disableInput();
+    },
+  };
+</script>
+
+<!-- Voiceflow widget loader with DisableInputExtension wired in -->
+<script type="text/javascript">
+  (function (d, t) {
+    var v = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    v.onload = function () {
+      window.voiceflow.chat
+        .load({
+          verify: { projectID: '68f783640591bc6ed924faef' },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production',
+          voice: {
+            url: 'https://runtime-api.voiceflow.com',
+          },
+          assistant: {
+            // Attach the DisableInput extension here
+            extensions: [DisableInputExtension],
+          },
+        })
+      
+        .then(() => {
+          window.voiceflow.chat.proactive.clear();
+          window.voiceflow.chat.proactive.push(
+            {
+              type: 'text',
+              payload: {
+                message:
+                       "Hi there 👋 I'm your Recruitment Assistant" 
+              },
+            },
+            {
+              type: 'text',
+              payload: {
+                message:
+                     "Click on the button below to get help with your application, logging onto the portal, information and technical issues",
+              },
+            }
+          );
+        });
+    };
+    v.src = 'https://cdn.voiceflow.com/widget-next/bundle.mjs';
+    v.type = 'text/javascript';
+    s.parentNode.insertBefore(v, s);
+  })(document, 'script');
+</script>
+
+
+</body>
+</html>
